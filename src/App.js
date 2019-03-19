@@ -7,7 +7,6 @@ const { Column} = Table;
 
 class App extends Component {
   render() {
-    console.log(dataJson,1111);
     return (
         <Table dataSource={dataJson}>
             <Column
