@@ -7,6 +7,7 @@ const { Column} = Table;
 
 class App extends Component {
   render() {
+      const a = (profession) => console.log(typeof profession , profession) ||( profession || []).map(prof => <Tag color="blue" key={prof}>{prof}</Tag>);
     return (
         <Table dataSource={dataJson}>
             <Column
@@ -19,16 +20,12 @@ class App extends Component {
                 dataIndex="lastName"
                 key="lastName"
             />
-       {/*   <Column
+        <Column
               title="Profession"
               dataIndex="profession"
               key="profession"
-              render={profession=> (
-                  <span>
-          {profession.map(prof => <Tag color="blue" key={prof}>{prof}</Tag>)}
-        </span>
-              )}
-          />*/}
+              render={profession => <span>{a(profession)}</span>}
+          />
         </Table>
     );
   }
