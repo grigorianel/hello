@@ -4,7 +4,7 @@
     "firstName": "Narine",
     "lastName": "Kosyan",
     "profession": [
-      "developer22",
+      "developer",
       "tester"
       ]
   },
@@ -12,14 +12,14 @@
     "id": 2,
     "firstName": "Elen",
     "lastName": "Grigoryan",
-    "profession": "developer3333"
+    "profession": "developer"
   },
   {
     "id": 3,
     "firstName": "John",
     "lastName": "Smith",
     "profession":[
-      "developer00",
+      "developer",
       "CTO"
     ]
   }
