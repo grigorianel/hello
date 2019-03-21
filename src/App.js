@@ -63,45 +63,31 @@ class App extends Component {
 
 	handleReset = (clearFilters) => {
 		clearFilters();
-		this.setState({ searchText: ''});
+		this.setState({ searchText: '' });
 	}
 
 	render() {
 		const a =(profession) => (typeof profession === "object")?
 			profession.map(prof => <Tag color="blue" key={prof}>{prof}</Tag>):
 			<Tag color="blue" key={profession}>{profession}</Tag>;
-
 		function getarray(a, b){
+			console.log(a.profession,88888, b.profession, 5555)
 			let x = [];
-			console.log(a.profession.length, typeof a.profession, a.id, 88888, b.profession.length, b.profession, b.id, 5555);
-		   if(typeof a.profession === "object" && typeof b.profession === "string"){
-		   	  x.push(b.profession);
-		   	  for(let i = 0; i<a.profession.length; ++i){
-		   	  	x.push(a.profession[i]);
-			  }
-			   x.concat(x);
-		   } else if(typeof a.profession === "string" && typeof b.profession === "object"){
-		   		x.push(a.profession);
-		   		for(let i= 0; i<b.profession.length; ++i){
-		   			x.push(b.profession[i]);
-				}
-			   x.concat(x);
+			let y = [];
+			let z = [];
+			for(let i =0; i < a.profession.length; ++i)
+			{   console.log(typeof a.profession[i],"blaaaa")
+				typeof a.profession[i] === "object" ? a.profession[i].map(it => x.push(it))
+					: y.push(a.profession[i]);
+
 			}
-		   	else if(typeof a.profession === "string" && typeof b.profession === "string"){
-		   		x.push(a.profession);
-		   		x.push(b.profession);
-			   x.concat(x)
-		   }
-		   	else if(typeof a.profession === "object" && typeof b.profession === "object" ){
-		   		let c = a.profession.concat(b.profession);
-		   		for(let i = 0; i < c.length; ++i){
-		   			x.push(c[i]);
-				}
-			   x.concat(x);
-		   }
-		   	console.log(x, 111);
-		   	console.log(x.sort(),41110);
-		   	return x.sort();
+			z = y.join("");
+			console.log(z,33333)
+			console.log(x,1111);
+			console.log(y,2222);
+			console.log(x.concat(z).sort(),"sorted");
+			return x.concat(z).sort();
+
 		}
 		return (
          <div>
