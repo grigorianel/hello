@@ -22,5 +22,14 @@
       "developer",
       "CTO"
     ]
+  },
+  {
+    "id": 4,
+    "firstName": "Mike",
+    "lastName": "Test",
+    "profession":[
+      "developer",
+      "CTO"
+    ]
   }
 ]
