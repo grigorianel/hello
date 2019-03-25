@@ -1,13 +1,18 @@
 import React, { Component } from "react";
 import { Table, Tag,Input, Button, Icon, } from "antd";
-import Highlighter from 'react-highlight-words';
 import dataJson from "./data.json";
 const { Column} = Table;
 
 class App extends Component {
 	state = {
-		searchText: null,
+		firstName: "",
+		lastName:  "",
+		profession: "",
+		dataSource: []
 	};
+	componentDidMount() {
+		this.setState({dataSource: dataJson})
+	}
 	getColumnSearchProps = (dataIndex) => ({
 		filterDropdown: ({
 							 setSelectedKeys, selectedKeys, confirm, clearFilters,
@@ -15,15 +20,15 @@ class App extends Component {
 			<div style={{ padding: 8 }}>
 				<Input
 					ref={node => { this.searchInput = node; }}
-					placeholder={`Search ${dataIndex}`}
+					placeholder={`Search ${dataIndex}`.toLowerCase()}
 					value={selectedKeys[0]}
 					onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-					onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
+					onPressEnter={() => this.handleSearch(selectedKeys,dataIndex, confirm)}
 					style={{ width: 188, marginBottom: 8, display: 'block' }}
 				/>
 				<Button
 					type="primary"
-					onClick={() => this.handleSearch(selectedKeys, confirm)}
+					onClick={() => this.handleSearch(selectedKeys, dataIndex,confirm)}
 					icon="search"
 					size="small"
 					style={{ width: 90, marginRight: 8 }}
@@ -31,7 +36,7 @@ class App extends Component {
 					Search
 				</Button>
 				<Button
-					onClick={() => this.handleReset(clearFilters)}
+					onClick={() => this.handleReset(clearFilters, dataIndex)}
 					size="small"
 					style={{ width: 90 }}
 				>
@@ -39,73 +44,36 @@ class App extends Component {
 				</Button>
 			</div>
 		),
-		filterIcon: filtered => <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />,
-		onFilter: (value, record) => record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
-		onFilterDropdownVisibleChange: (visible) => {
-			if (visible) {
-				setTimeout(() => this.searchInput.select());
-			}
+        filterIcon: filtered => <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />,
+		onFilter: (value, record) => {
+		    if(dataIndex === "firstName") return record[dataIndex].toString().toLowerCase().includes(this.state.firstName)
+		else
+		    if(dataIndex === "lastName")  return record[dataIndex].toString().toLowerCase().includes(this.state.lastName)
+		else
+		    if(dataIndex === "profession") return record[dataIndex].toString().toLowerCase().includes(this.state.profession)
 		},
-		render: (text) => (
-			<Highlighter
-				highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-				searchWords={[this.state.searchText]}
-				autoEscape
-				textToHighlight={text.toString()}
-			/>
-		),
 	})
-
-	handleSearch = (selectedKeys, confirm) => {
+	handleSearch = (selectedKeys,dataIndex, confirm) => {
 		confirm();
-		this.setState({ searchText: selectedKeys[0]});
+		if(dataIndex === 'firstName') this.setState({firstName: selectedKeys[0].toLowerCase()});
+		else if(dataIndex === 'lastName') this.setState({lastName: selectedKeys[0].toLowerCase()});
+		else if(dataIndex === 'profession') this.setState({profession: selectedKeys[0].split(" ").join().toLowerCase()})
 	}
-
-	handleReset = (clearFilters) => {
+    handleReset = (clearFilters, dataIndex) => {
 		clearFilters();
-		this.setState({ searchText: ''});
+		if(dataIndex === 'firstName'){ this.setState({firstName: ''});}
+		else if(dataIndex === 'lastName'){ this.setState({lastName: ''});}
+		else if(dataIndex === 'profession'){ this.setState({profession:''})}
 	}
 
 	render() {
+
 		const a =(profession) => (typeof profession === "object")?
 			profession.map(prof => <Tag color="blue" key={prof}>{prof}</Tag>):
-			<Tag color="blue" key={profession}>{profession}</Tag>;
-
-		function getarray(a, b){
-			let x = [];
-			console.log(a.profession.length, typeof a.profession, a.id, 88888, b.profession.length, b.profession, b.id, 5555);
-		   if(typeof a.profession === "object" && typeof b.profession === "string"){
-		   	  x.push(b.profession);
-		   	  for(let i = 0; i<a.profession.length; ++i){
-		   	  	x.push(a.profession[i]);
-			  }
-			   x.concat(x);
-		   } else if(typeof a.profession === "string" && typeof b.profession === "object"){
-		   		x.push(a.profession);
-		   		for(let i= 0; i<b.profession.length; ++i){
-		   			x.push(b.profession[i]);
-				}
-			   x.concat(x);
-			}
-		   	else if(typeof a.profession === "string" && typeof b.profession === "string"){
-		   		x.push(a.profession);
-		   		x.push(b.profession);
-			   x.concat(x)
-		   }
-		   	else if(typeof a.profession === "object" && typeof b.profession === "object" ){
-		   		let c = a.profession.concat(b.profession);
-		   		for(let i = 0; i < c.length; ++i){
-		   			x.push(c[i]);
-				}
-			   x.concat(x);
-		   }
-		   	console.log(x, 111);
-		   	console.log(x.sort(),41110);
-		   	return x.sort();
-		}
+			<Tag color="blue" key={profession}>{profession}</Tag>
 		return (
          <div>
-			<Table dataSource={dataJson}>
+			<Table dataSource={this.state.dataSource} onChange ={this.handleChange}>
 				<Column
 					title="First Name"
 					dataIndex="firstName"
@@ -125,14 +93,22 @@ class App extends Component {
 					dataIndex="profession"
 					key="profession"
 					render={profession => <span>{a(profession)}</span>}
-					sorter ={(a, b)=> getarray(a,b)}
+                    sorter = {(a,b) => {
+                    if(typeof a.profession === "object" && typeof b.profession === "string")
+                        return a.profession.join('').length - b.profession.length
+                    else if(typeof b.profession === "object" && typeof a.profession === "string")
+                        return a.profession.length - b.profession.join('').length
+                    else if(typeof b.profession === "object" && typeof a.profession === "object")
+                        return a.profession.join('').length - b.profession.join('').length
+                    else if(typeof b.profession === "string" && typeof a.profession === "string")
+                        return a.profession.length - b.profession.length
+                    }}
 					{...this.getColumnSearchProps('profession')}
+
 				/>
 			</Table>
 		 </div>
 		);
 	}
 }
-
-
 export default App;
