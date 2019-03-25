@@ -46,24 +46,60 @@ class App extends Component {
 		),
         filterIcon: filtered => <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />,
 		onFilter: (value, record) => {
-		    if(dataIndex === "firstName") return record[dataIndex].toString().toLowerCase().includes(this.state.firstName)
+		    switch (dataIndex) {
+                case 'firstName':
+                    return record[dataIndex].toString().toLowerCase().includes(this.state.firstName);
+                case 'lastName':
+                    return record[dataIndex].toString().toLowerCase().includes(this.state.lastName);
+                case 'profession':
+                    return record[dataIndex].toString().toLowerCase().includes(this.state.profession);
+                default:
+                    break;
+            }
+		 /*   if(dataIndex === "firstName") return record[dataIndex].toString().toLowerCase().includes(this.state.firstName)
 		else
 		    if(dataIndex === "lastName")  return record[dataIndex].toString().toLowerCase().includes(this.state.lastName)
 		else
-		    if(dataIndex === "profession") return record[dataIndex].toString().toLowerCase().includes(this.state.profession)
+		    if(dataIndex === "profession") return record[dataIndex].toString().toLowerCase().includes(this.state.profession)*/
 		},
 	})
 	handleSearch = (selectedKeys,dataIndex, confirm) => {
 		confirm();
-		if(dataIndex === 'firstName') this.setState({firstName: selectedKeys[0].toLowerCase()});
+		switch (dataIndex) {
+            case 'firstName':
+                this.setState({firstName: selectedKeys[0].toLowerCase()});
+                break;
+            case 'lastName':
+                this.setState({lastName: selectedKeys[0].toLowerCase()});
+                break;
+            case 'profession':
+                this.setState({profession: selectedKeys[0].split(" ").join().toLowerCase()})
+                break;
+            default:
+                break;
+        }
+		/*if(dataIndex === 'firstName') this.setState({firstName: selectedKeys[0].toLowerCase()});
 		else if(dataIndex === 'lastName') this.setState({lastName: selectedKeys[0].toLowerCase()});
-		else if(dataIndex === 'profession') this.setState({profession: selectedKeys[0].split(" ").join().toLowerCase()})
+		else if(dataIndex === 'profession') this.setState({profession: selectedKeys[0].split(" ").join().toLowerCase()})*/
 	}
     handleReset = (clearFilters, dataIndex) => {
 		clearFilters();
-		if(dataIndex === 'firstName'){ this.setState({firstName: ''});}
+		switch (dataIndex) {
+            case 'firstName':
+                this.setState({firstName: ''});
+                break;
+            case 'lastName':
+                this.setState({lasttName: ''});
+                break;
+            case 'profession':
+                this.setState({profession: ''})
+                break;
+            default:
+                break;
+        }
+		/*if(dataIndex === 'firstName'){ this.setState({firstName: ''});}
 		else if(dataIndex === 'lastName'){ this.setState({lastName: ''});}
-		else if(dataIndex === 'profession'){ this.setState({profession:''})}
+		else if(dataIndex === 'profession'){ this.setState({profession:''})}*/
 	}
 
 	render() {
@@ -73,7 +109,7 @@ class App extends Component {
 			<Tag color="blue" key={profession}>{profession}</Tag>
 		return (
          <div>
-			<Table dataSource={this.state.dataSource} onChange ={this.handleChange}>
+			<Table dataSource={this.state.dataSource} rowKey="id">
 				<Column
 					title="First Name"
 					dataIndex="firstName"
@@ -92,7 +128,7 @@ class App extends Component {
 					title="Profession"
 					dataIndex="profession"
 					key="profession"
-					render={profession => <span>{a(profession)}</span>}
+					render={profession => <span key={profession} >{a(profession)}</span>}
                     sorter = {(a,b) => {
                     if(typeof a.profession === "object" && typeof b.profession === "string")
                         return a.profession.join('').length - b.profession.length
@@ -104,7 +140,6 @@ class App extends Component {
                         return a.profession.length - b.profession.length
                     }}
 					{...this.getColumnSearchProps('profession')}
-
 				/>
 			</Table>
 		 </div>
