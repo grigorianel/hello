@@ -18,7 +18,7 @@ class App extends Component {
 							 setSelectedKeys, selectedKeys, confirm, clearFilters,
 						 }) => (
 			<div style={{ padding: 8 }}>
-				<Input
+                <Input
 					ref={node => { this.searchInput = node; }}
 					placeholder={`Search ${dataIndex}`.toLowerCase()}
 					value={selectedKeys[0]}
@@ -56,15 +56,14 @@ class App extends Component {
                 default:
                     break;
             }
-		 /*   if(dataIndex === "firstName") return record[dataIndex].toString().toLowerCase().includes(this.state.firstName)
-		else
-		    if(dataIndex === "lastName")  return record[dataIndex].toString().toLowerCase().includes(this.state.lastName)
-		else
-		    if(dataIndex === "profession") return record[dataIndex].toString().toLowerCase().includes(this.state.profession)*/
 		},
 	})
+    clearFilter = (filtered) => {
+        this.setState({ firstName: '', lastName: '', profession: ''});
+    }
 	handleSearch = (selectedKeys,dataIndex, confirm) => {
 		confirm();
+		/*this.setState({filter: true});*/
 		switch (dataIndex) {
             case 'firstName':
                 this.setState({firstName: selectedKeys[0].toLowerCase()});
@@ -78,9 +77,6 @@ class App extends Component {
             default:
                 break;
         }
-		/*if(dataIndex === 'firstName') this.setState({firstName: selectedKeys[0].toLowerCase()});
-		else if(dataIndex === 'lastName') this.setState({lastName: selectedKeys[0].toLowerCase()});
-		else if(dataIndex === 'profession') this.setState({profession: selectedKeys[0].split(" ").join().toLowerCase()})*/
 	}
     handleReset = (clearFilters, dataIndex) => {
 		clearFilters();
@@ -101,15 +97,14 @@ class App extends Component {
 		else if(dataIndex === 'lastName'){ this.setState({lastName: ''});}
 		else if(dataIndex === 'profession'){ this.setState({profession:''})}*/
 	}
-
 	render() {
-
 		const a =(profession) => (typeof profession === "object")?
 			profession.map(prof => <Tag color="blue" key={prof}>{prof}</Tag>):
 			<Tag color="blue" key={profession}>{profession}</Tag>
 		return (
          <div>
-			<Table dataSource={this.state.dataSource} rowKey="id">
+             <Button onClick={this.clearFilter}>Clear filters</Button>
+             <Table dataSource={this.state.dataSource} rowKey="id">
 				<Column
 					title="First Name"
 					dataIndex="firstName"

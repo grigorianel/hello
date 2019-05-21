@@ -1,16 +1,16 @@
 [
   {
     "id": 1,
-    "firstName": "Narine",
-    "lastName": "Kosyan",
+    "firstName": "Narine1",
+    "lastName": "Koyan1",
     "profession": [
       "developer",
-      "tester"
+      "designer"
       ]
   },
   {
     "id": 2,
-    "firstName": "Elen",
+    "firstName": "Elen1",
     "lastName": "Grigoryan",
     "profession": "developer"
   },
@@ -31,5 +31,29 @@
       "developer",
       "CTO"
     ]
+  },
+  {
+    "id": 5,
+    "firstName": "Narine",
+    "lastName": "Kosyan",
+    "profession": [
+      "developer",
+      "tester"
+    ]
+  },
+  {
+    "id": 6,
+    "firstName": "Michele",
+    "lastName": "Testlklk",
+    "profession":[
+      "developer",
+      "cto"
+    ]
+  },
+  {
+    "id": 7,
+    "firstName": "Elen",
+    "lastName": "Elen",
+    "profession": "developer"
   }
 ]
